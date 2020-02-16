@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// @ts-ignore
 export const starterData = [
   {
     id: "5e4534fcc2e1e4711f596b51",
