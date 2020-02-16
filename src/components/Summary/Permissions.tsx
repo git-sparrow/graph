@@ -6,24 +6,27 @@ import uniqBy from 'lodash/uniqBy'
 
 import {User} from '../../store/types';
 
-const Roles = () => {
+const Permissions = () => {
   const users = useSelector((store: RootState) => store.users.users)
 
-  const getRoles = () => {
-      const rolesArr: {id:string, name: string}[] = [];
+  const getPermissions = () => {
+      const permissionsArr: {id:string, name: string}[] = [];
 
       users.forEach((user) => {
             user.roles.forEach((role) => {
-                rolesArr.push({id: role.id, name: role.name})
+                role.permissions.forEach((permission) => {
+                    permissionsArr.push({id: permission.id, name: permission.name})
+                })
             })
       })
-     const uniqueArr: {id:string, name: string}[] = uniqBy(rolesArr, 'id');
+     
+     const uniqueArr: {id:string, name: string}[] = uniqBy(permissionsArr, 'id');
      
      return (
          <ul>
-             {uniqueArr.length > 0 && uniqueArr.map((role) => {
+             {uniqueArr.length > 0 && uniqueArr.map((item) => {
                 return (
-                    <li key={role.id}>{role.name}</li>
+                    <li key={item.id}>{item.name}</li>
                 )
              })}
          </ul>
@@ -32,10 +35,10 @@ const Roles = () => {
 
   return (
     <div>
-      <h1>Roles component</h1>
-     {getRoles()}   
+      <h1>Permissions component</h1>
+     {getPermissions()}   
     </div>
   );
 };
 
-export default Roles;
+export default Permissions;

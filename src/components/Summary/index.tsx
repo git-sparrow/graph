@@ -8,6 +8,9 @@ import Box from '@material-ui/core/Box';
 
 import { useDispatch, useSelector } from "react-redux";
 import {RootState} from '../../store/rootReducer'
+import Roles from './Roles'
+import Permissions from './Permissions'
+import Objects from './Objects'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -76,13 +79,13 @@ export default function SimpleTabs() {
         </ul>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+       <Roles />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <Permissions />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+       <Objects />
       </TabPanel>
     </div>
   );
