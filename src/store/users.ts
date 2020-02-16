@@ -174,6 +174,5 @@ export const fetchUsers = () => {
 
             return Promise.resolve('Dummy data fetched');
         })
-
     };
 };

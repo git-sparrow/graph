@@ -1,44 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
+import TextField from '@material-ui/core/TextField';
 import { useSelector } from "react-redux";
 import { fetchUsers } from "../../store/users";
 import {RootState} from '../../store/rootReducer'
 import uniqBy from 'lodash/uniqBy'
 
 import {User} from '../../store/types';
+type ObjectsProps = {
+  objects: {id: string, name: string}[]
+}
 
-const Objects = () => {
-  const users = useSelector((store: RootState) => store.users.users)
+const Objects = ({objects}: ObjectsProps) => {  
+  const [value, setValue] = useState<string>('')
 
-  const getObjects = () => {
-      const objectsArr: {id:string, name: string}[] = [];
-
-      users.forEach((user) => {
-            user.roles.forEach((role) => {
-                role.permissions.forEach((permission) => {
-                    permission.objects.forEach(item => {
-                        objectsArr.push({id: item.id, name: item.name})
-                       })
-                    })
-            })
-      })
-
-     const uniqueArr: {id:string, name: string}[] = uniqBy(objectsArr, 'id');
-     
-     return (
-         <ul>
-             {uniqueArr.length > 0 && uniqueArr.map((item) => {
-                return (
-                    <li key={item.id}>{item.name}</li>
-                )
-             })}
-         </ul>
-     )
+  const _handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setValue(e.target.value)
   }
 
   return (
     <div>
       <h1>Objects component</h1>
-     {getObjects()}   
+      <ul>
+             {objects.length > 0 && objects.map((item) => {
+                return (
+                    <li key={item.id}>{item.name}</li>
+                )
+             })}
+      </ul>
+      <div>
+        <TextField
+          id="outlined-search"
+          label="Add new object"
+          type="search"
+          variant="outlined"
+          value={value}
+          onChange={_handleChange}
+        />
+      </div>  
     </div>
   );
 };
