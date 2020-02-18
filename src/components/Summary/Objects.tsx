@@ -1,32 +1,31 @@
 import React, { useState } from "react";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 import { useSelector } from "react-redux";
 import { fetchUsers } from "../../store/users";
-import {RootState} from '../../store/rootReducer'
-import uniqBy from 'lodash/uniqBy'
+import { RootState } from "../../store/rootReducer";
+import uniqBy from "lodash/uniqBy";
 
-import {User} from '../../store/types';
+import { User } from "../../store/types";
 type ObjectsProps = {
-  objects: {id: string, name: string}[]
-}
+  objects: { id: string; name: string }[];
+};
 
-const Objects = ({objects}: ObjectsProps) => {  
-  const [value, setValue] = useState<string>('')
+const Objects = ({ objects }: ObjectsProps) => {
+  const [value, setValue] = useState<string>("");
 
   const _handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
-    setValue(e.target.value)
-  }
+    setValue(e.target.value);
+  };
 
   return (
     <div>
       <h1>Objects component</h1>
       <ul>
-             {objects.length > 0 && objects.map((item) => {
-                return (
-                    <li key={item.id}>{item.name}</li>
-                )
-             })}
+        {objects.length > 0 &&
+          objects.map(item => {
+            return <li key={item.id}>{item.name}</li>;
+          })}
       </ul>
       <div>
         <TextField
@@ -37,7 +36,7 @@ const Objects = ({objects}: ObjectsProps) => {
           value={value}
           onChange={_handleChange}
         />
-      </div>  
+      </div>
     </div>
   );
 };
