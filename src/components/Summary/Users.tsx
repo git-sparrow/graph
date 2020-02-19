@@ -1,12 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/rootReducer";
 
 type RolesProps = {
   roles: { id: string; name: string }[];
 };
 
-const Roles = ({ roles }: RolesProps) => {
+const Users = ({ roles }: RolesProps) => {
   // const users: object = useSelector((store: RootState) => store.users.users);
   // console.log(users);
   // // @ts-ignore
@@ -30,4 +28,4 @@ const Roles = ({ roles }: RolesProps) => {
   );
 };
 
-export default Roles;
+export default Users;

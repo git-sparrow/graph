@@ -3,47 +3,71 @@ import data from "../data.json";
 
 import produce, { Draft } from "immer";
 
-import { User } from "./types";
 import { Dispatch } from "redux";
 import { normalizeUsersData } from "../util";
+import { initObjects } from "./objects";
+import { initPermissions } from "./permissions";
+import { initRoles } from "./roles";
 
-const SET_USERS = "SET_USERS";
+export interface User {
+  id: string;
+  name: string;
+  address: string;
+  roles: string[];
+}
 
-export interface Users {
-  users: Array<User>;
+interface InitUsers {
+  type: typeof INIT_USERS;
+  payload: object;
 }
-interface SetUsers {
-  type: typeof SET_USERS;
-  payload: Users;
+interface SetUser {
+  type: typeof SET_USER;
+  payload: object;
 }
-export interface InitialState {
-  users: Array<User>;
-}
+export type UsersActionTypes = InitUsers | SetUser;
+
+type InitialState = {
+  users: User | {};
+};
+
+const INIT_USERS = "INIT_USERS";
+const SET_USER = "SET_USER";
+
 const initialState: InitialState = {
-  users: []
+  users: {}
 };
 
 // reducer
-export default (state = initialState, action: SetUsers) =>
+export default (state = initialState, action: UsersActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {
-      case SET_USERS:
+      case INIT_USERS:
+        draft.users = action.payload;
+        break;
+      case SET_USER:
         draft.users = action.payload;
         break;
     }
   });
 
-export const setUsers = (users: User[] = []) => ({
-  type: SET_USERS,
+export const initUsers = (users = {}) => ({
+  type: INIT_USERS,
   payload: users
 });
+export const setUser = (user: User) => ({
+  type: SET_USER,
+  payload: user
+});
+
 export const fetchUsers = () => {
   return (dispatch: Dispatch) => {
     return Promise.resolve("started from resolve").then(() => {
       const normalizedData = normalizeUsersData(data);
-      console.log(normalizedData);
-
-      dispatch(setUsers(data));
+      const { objects, permissions, roles, users } = normalizedData.entities;
+      dispatch(initObjects(objects));
+      dispatch(initPermissions(permissions));
+      dispatch(initRoles(roles));
+      dispatch(initUsers(users));
 
       return Promise.resolve("Dummy data fetched");
     });

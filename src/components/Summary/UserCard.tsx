@@ -6,8 +6,6 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/rootReducer";
 import Roles from "./Roles";
 import Permissions from "./Permissions";
 import Objects from "./Objects";

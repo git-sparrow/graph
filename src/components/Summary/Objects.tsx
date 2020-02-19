@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import { useSelector } from "react-redux";
-import { fetchUsers } from "../../store/users";
-import { RootState } from "../../store/rootReducer";
-import uniqBy from "lodash/uniqBy";
 
-import { User } from "../../store/types";
 type ObjectsProps = {
   objects: { id: string; name: string }[];
 };

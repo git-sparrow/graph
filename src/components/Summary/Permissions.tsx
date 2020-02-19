@@ -1,10 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { fetchUsers } from "../../store/users";
-import { RootState } from "../../store/rootReducer";
-import uniqBy from "lodash/uniqBy";
+import React from "react";
 
-import { User } from "../../store/types";
 type PermissionsProps = {
   permissions: { id: string; name: string }[];
 };
