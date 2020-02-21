@@ -23,11 +23,19 @@ export interface DeleteRole {
   type: typeof DELETE_ROLE;
   payload: string;
 }
+export interface SaveEditedRole {
+  type: typeof SAVE_EDITED_ROLE;
+  payload: {
+    id: string;
+    name: string;
+  };
+}
 export type RolesActionTypes =
   | InitRoles
   | SetRole
   | DeletePermission
-  | DeleteRole;
+  | DeleteRole
+  | SaveEditedRole;
 
 type InitialState = {
   byId: Role | {};
@@ -35,6 +43,7 @@ type InitialState = {
 
 const INIT_ROLES = "INIT_ROLES";
 export const DELETE_ROLE = "DELETE_ROLE";
+const SAVE_EDITED_ROLE = "SAVE_EDITED_ROLE";
 const SET_ROLE = "SET_ROLE";
 
 const initialState: InitialState = {
@@ -54,6 +63,9 @@ export default (state = initialState, action: RolesActionTypes) =>
       case DELETE_ROLE:
         draft.byId = omit(state.byId, [action.payload]);
         break;
+      case SAVE_EDITED_ROLE:
+        draft.byId[action.payload.id].name = action.payload.name;
+        break;
       case SET_ROLE:
         draft.roles = action.payload;
         break;
@@ -68,6 +80,11 @@ export const initRoles = (roles = {}): RolesActionTypes => ({
 export const deleteRole = (id: string): RolesActionTypes => ({
   type: DELETE_ROLE,
   payload: id
+});
+
+export const saveEditedRole = (id: string, name: string): RolesActionTypes => ({
+  type: SAVE_EDITED_ROLE,
+  payload: { id, name }
 });
 
 export const setRole = (role = {}): RolesActionTypes => ({

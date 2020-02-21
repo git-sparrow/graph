@@ -31,7 +31,19 @@ interface DeleteUser {
   type: typeof DELETE_USER;
   payload: string;
 }
-export type UsersActionTypes = InitUsers | DeleteRole | DeleteUser | SetUser;
+export interface SaveEditedUser {
+  type: typeof SAVE_EDITED_USER;
+  payload: {
+    id: string;
+    name: string;
+  };
+}
+export type UsersActionTypes =
+  | InitUsers
+  | DeleteRole
+  | DeleteUser
+  | SaveEditedUser
+  | SetUser;
 
 type InitialState = {
   byId: User | {};
@@ -39,6 +51,7 @@ type InitialState = {
 
 const INIT_USERS = "INIT_USERS";
 const DELETE_USER = "DELETE_USER";
+const SAVE_EDITED_USER = "SAVE_EDITED_USER";
 const SET_USER = "SET_USER";
 
 const initialState: InitialState = {
@@ -58,6 +71,9 @@ export default (state = initialState, action: UsersActionTypes) =>
       case DELETE_USER:
         draft.byId = omit(state.byId, [action.payload]);
         break;
+      case SAVE_EDITED_USER:
+        draft.byId[action.payload.id].name = action.payload.name;
+        break;
       case SET_USER:
         draft.users = action.payload;
         break;
@@ -72,6 +88,11 @@ export const initUsers = (users = {}): UsersActionTypes => ({
 export const deleteUser = (id: string): UsersActionTypes => ({
   type: DELETE_USER,
   payload: id
+});
+
+export const saveEditedUser = (id: string, name: string): UsersActionTypes => ({
+  type: SAVE_EDITED_USER,
+  payload: { id, name }
 });
 
 export const setUser = (user: User): UsersActionTypes => ({

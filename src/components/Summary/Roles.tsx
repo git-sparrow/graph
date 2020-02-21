@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import Card from "./components/Card";
-import { deleteRole } from "../../store/roles";
+import { deleteRole, saveEditedRole } from "../../store/roles";
 
 const Roles = () => {
   const roles: any = useSelector((store: RootState) => store.roles.byId);
@@ -11,6 +11,13 @@ const Roles = () => {
   const _handleDelete = useCallback(
     id => {
       dispatch(deleteRole(id));
+    },
+    [dispatch]
+  );
+
+  const _handleSave = useCallback(
+    (id: string, name: string) => {
+      dispatch(saveEditedRole(id, name));
     },
     [dispatch]
   );
@@ -30,6 +37,7 @@ const Roles = () => {
               id={item.id}
               name={item.name}
               onDelete={_handleDelete}
+              onSave={_handleSave}
             />
           );
         })}

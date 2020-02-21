@@ -4,7 +4,7 @@ import { RootState } from "../../store/rootReducer";
 
 import Card from "./components/Card";
 
-import { deleteObject } from "../../store/objects";
+import { deleteObject, saveEditedObject } from "../../store/objects";
 
 const Objects = () => {
   const objects: any = useSelector((store: RootState) => store.objects.byId);
@@ -13,6 +13,13 @@ const Objects = () => {
   const _handleDelete = useCallback(
     id => {
       dispatch(deleteObject(id));
+    },
+    [dispatch]
+  );
+
+  const _handleSave = useCallback(
+    (id: string, name: string) => {
+      dispatch(saveEditedObject(id, name));
     },
     [dispatch]
   );
@@ -32,6 +39,7 @@ const Objects = () => {
               id={object.id}
               name={object.name}
               onDelete={_handleDelete}
+              onSave={_handleSave}
             />
           );
         })}

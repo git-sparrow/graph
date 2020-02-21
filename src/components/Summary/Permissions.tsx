@@ -2,7 +2,10 @@ import React, { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import Card from "./components/Card";
-import { deletePermission } from "../../store/permissions";
+import {
+  deletePermission,
+  saveEditedPermission
+} from "../../store/permissions";
 
 const Permissions = () => {
   const permissions: any = useSelector(
@@ -13,6 +16,13 @@ const Permissions = () => {
   const _handleDelete = useCallback(
     id => {
       dispatch(deletePermission(id));
+    },
+    [dispatch]
+  );
+
+  const _handleSave = useCallback(
+    (id: string, name: string) => {
+      dispatch(saveEditedPermission(id, name));
     },
     [dispatch]
   );
@@ -32,6 +42,7 @@ const Permissions = () => {
               id={item.id}
               name={item.name}
               onDelete={_handleDelete}
+              onSave={_handleSave}
             />
           );
         })}

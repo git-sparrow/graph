@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { deleteUser } from "../../store/users";
+import { deleteUser, saveEditedUser } from "../../store/users";
 import Card from "./components/Card";
 
 const Users = () => {
@@ -11,6 +11,13 @@ const Users = () => {
   const _handleDelete = useCallback(
     id => {
       dispatch(deleteUser(id));
+    },
+    [dispatch]
+  );
+
+  const _handleSave = useCallback(
+    (id: string, name: string) => {
+      dispatch(saveEditedUser(id, name));
     },
     [dispatch]
   );
@@ -31,6 +38,7 @@ const Users = () => {
                 id={item.id}
                 name={item.name}
                 onDelete={_handleDelete}
+                onSave={_handleSave}
               />
             );
           })}

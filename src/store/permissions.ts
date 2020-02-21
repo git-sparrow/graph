@@ -24,11 +24,19 @@ export interface DeletePermission {
   type: typeof DELETE_PERMISSION;
   payload: string;
 }
+export interface SaveEditedPermission {
+  type: typeof SAVE_EDITED_PERMISSION;
+  payload: {
+    id: string;
+    name: string;
+  };
+}
 export type PermissionsActionTypes =
   | InitPermissions
   | SetPermission
   | DeleteObject
-  | DeletePermission;
+  | DeletePermission
+  | SaveEditedPermission;
 
 type InitialState = {
   byId: Permission | {};
@@ -36,6 +44,7 @@ type InitialState = {
 
 const INIT_PERMISSIONS = "INIT_PERMISSIONS";
 const DELETE_OBJECT = "DELETE_OBJECT";
+const SAVE_EDITED_PERMISSION = "SAVE_EDITED_PERMISSION";
 export const DELETE_PERMISSION = "DELETE_PERMISSION";
 const SET_PERMISSION = "SET_PERMISSION";
 
@@ -56,6 +65,9 @@ export default (state = initialState, action: PermissionsActionTypes) =>
       case DELETE_PERMISSION:
         draft.byId = omit(state.byId, [action.payload]);
         break;
+      case SAVE_EDITED_PERMISSION:
+        draft.byId[action.payload.id].name = action.payload.name;
+        break;
       case SET_PERMISSION:
         draft.permissions = action.payload;
         break;
@@ -70,6 +82,14 @@ export const initPermissions = (objects = {}): PermissionsActionTypes => ({
 export const deletePermission = (id: string): PermissionsActionTypes => ({
   type: DELETE_PERMISSION,
   payload: id
+});
+
+export const saveEditedPermission = (
+  id: string,
+  name: string
+): PermissionsActionTypes => ({
+  type: SAVE_EDITED_PERMISSION,
+  payload: { id, name }
 });
 
 export const setPermissions = (permissions = {}) => ({
