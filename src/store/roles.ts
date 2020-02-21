@@ -17,14 +17,14 @@ interface SetRole {
 export type RolesActionTypes = InitRoles | SetRole;
 
 type InitialState = {
-  roles: Role | {};
+  byId: Role | {};
 };
 
 const INIT_ROLES = "INIT_ROLES";
 const SET_ROLE = "SET_ROLE";
 
 const initialState: InitialState = {
-  roles: {}
+  byId: {}
 };
 
 // reducer
@@ -32,7 +32,7 @@ export default (state = initialState, action: RolesActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {
       case INIT_ROLES:
-        draft.roles = action.payload;
+        draft.byId = action.payload;
         break;
       case SET_ROLE:
         draft.roles = action.payload;

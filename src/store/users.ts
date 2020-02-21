@@ -4,7 +4,7 @@ import data from "../data.json";
 import produce, { Draft } from "immer";
 
 import { Dispatch } from "redux";
-import { normalizeUsersData } from "../util";
+import { normalizeUsersData } from "../util/normalizr";
 import { initObjects } from "./objects";
 import { initPermissions } from "./permissions";
 import { initRoles } from "./roles";
@@ -27,14 +27,14 @@ interface SetUser {
 export type UsersActionTypes = InitUsers | SetUser;
 
 type InitialState = {
-  users: User | {};
+  byId: User | {};
 };
 
 const INIT_USERS = "INIT_USERS";
 const SET_USER = "SET_USER";
 
 const initialState: InitialState = {
-  users: {}
+  byId: {}
 };
 
 // reducer
@@ -42,7 +42,7 @@ export default (state = initialState, action: UsersActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {
       case INIT_USERS:
-        draft.users = action.payload;
+        draft.byId = action.payload;
         break;
       case SET_USER:
         draft.users = action.payload;

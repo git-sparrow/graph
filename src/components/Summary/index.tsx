@@ -91,7 +91,7 @@ export default function Summary() {
           {/*<Permissions permissions={permissionsArr} />*/}
         </TabPanel>
         <TabPanel value={value} index={3}>
-          {/*<Objects objects={objectsArr} />*/}
+          <Objects />
         </TabPanel>
       </div>
     </div>

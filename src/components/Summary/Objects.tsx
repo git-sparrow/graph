@@ -1,37 +1,34 @@
-import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
+import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+
+import Card from "./components/Card";
+
+import { IObject } from "../../store/objects";
 
 type ObjectsProps = {
   objects: { id: string; name: string }[];
 };
 
-const Objects = ({ objects }: ObjectsProps) => {
-  const [value, setValue] = useState<string>("");
+const Objects = () => {
+  const objects: any = useSelector((store: RootState) => store.objects.byId);
 
-  const _handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setValue(e.target.value);
-  };
+  let objectsArray: IObject[] = Object.keys(objects).map(item => {
+    return objects[item];
+  });
+
+  console.log("testArray", objectsArray);
 
   return (
     <div>
       <h1>Objects component</h1>
-      <ul>
-        {objects.length > 0 &&
-          objects.map(item => {
-            return <li key={item.id}>{item.name}</li>;
-          })}
-      </ul>
-      <div>
-        <TextField
-          id="outlined-search"
-          label="Add new object"
-          type="search"
-          variant="outlined"
-          value={value}
-          onChange={_handleChange}
-        />
-      </div>
+
+      {objectsArray.length > 0 &&
+        objectsArray.map((object: IObject) => {
+          return <Card key={object.id} id={object.id} name={object.name} />;
+        })}
+
+      <div></div>
     </div>
   );
 };
