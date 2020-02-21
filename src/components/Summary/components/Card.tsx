@@ -5,8 +5,6 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
-import { deleteObject } from "../../../store/objects";
 
 const useStyles = makeStyles({
   root: {
@@ -24,15 +22,15 @@ const useStyles = makeStyles({
 type CardProps = {
   id: string;
   name: string;
+  onDelete: (id: string) => void;
 };
 
-export default function SimpleCard({ id, name }: CardProps) {
+export default function SimpleCard({ id, name, onDelete }: CardProps) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
-  const dispatch = useDispatch();
 
   const _handleDelete = () => {
-    dispatch(deleteObject(id));
+    onDelete(id);
   };
 
   return (

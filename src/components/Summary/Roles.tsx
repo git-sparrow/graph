@@ -1,31 +1,38 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
+import Card from "./components/Card";
+import { deleteRole } from "../../store/roles";
 
-type RolesProps = {
-  roles: { id: string; name: string }[];
-};
+const Roles = () => {
+  const roles: any = useSelector((store: RootState) => store.roles.byId);
+  const dispatch = useDispatch();
 
-const Roles = ({ roles }: RolesProps) => {
-  // const users: object = useSelector((store: RootState) => store.users.users);
-  // console.log(users);
-  // // @ts-ignore
-  // const testArray = Object.keys(users).map((item: string) => {
-  //     // @ts-ignore
-  //     console.log(users[item], "Test");
-  //     // @ts-ignore
-  //     return users[item];
-  // });
-  // console.log("testArray", testArray);
+  const _handleDelete = useCallback(
+    id => {
+      dispatch(deleteRole(id));
+    },
+    [dispatch]
+  );
+
+  let rolesArray = Object.keys(roles).map(item => {
+    return roles[item];
+  });
+
   return (
     <div>
       <h1>Roles component</h1>
-      <ul>
-        {roles.length > 0 &&
-          roles.map(role => {
-            return <li key={role.id}>{role.name}</li>;
-          })}
-      </ul>
+      {rolesArray.length > 0 &&
+        rolesArray.map(item => {
+          return (
+            <Card
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              onDelete={_handleDelete}
+            />
+          );
+        })}
     </div>
   );
 };

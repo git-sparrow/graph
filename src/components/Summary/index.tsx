@@ -10,9 +10,6 @@ import Roles from "./Roles";
 import Permissions from "./Permissions";
 import Objects from "./Objects";
 
-import { User } from "../../store/types";
-import { Button } from "@material-ui/core";
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
@@ -50,10 +47,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-type UserCardProps = {
-  user: User;
-};
-
 export default function Summary() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -61,13 +54,9 @@ export default function Summary() {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  const _handleClickDetails = () => {};
 
   return (
     <div>
-      <h2>User name: </h2>
-      <h3>User address: </h3>
-      <Button onClick={_handleClickDetails}>Details</Button>
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs
@@ -85,10 +74,10 @@ export default function Summary() {
           {/*<Roles roles={rolesArr} />*/}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          {/*<Roles roles={rolesArr} />*/}
+          <Roles />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {/*<Permissions permissions={permissionsArr} />*/}
+          <Permissions />
         </TabPanel>
         <TabPanel value={value} index={3}>
           <Objects />
