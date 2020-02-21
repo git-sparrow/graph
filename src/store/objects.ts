@@ -22,8 +22,11 @@ interface SaveEditedObject {
   };
 }
 export interface SetObject {
-  type: typeof SET_OBJECT;
-  payload: object;
+  type: typeof ADD_OBJECT;
+  payload: {
+    id: string;
+    name: string;
+  };
 }
 
 type InitialState = {
@@ -33,7 +36,7 @@ type InitialState = {
 const INIT_OBJECTS = "INIT_OBJECTS";
 const DELETE_OBJECT = "DELETE_OBJECT";
 const SAVE_EDITED_OBJECT = "SAVE_EDITED_OBJECT";
-const SET_OBJECT = "SET_OBJECT";
+const ADD_OBJECT = "ADD_OBJECT";
 export type ObjectsActionTypes =
   | InitObjects
   | DeleteObject
@@ -57,8 +60,11 @@ export default (state = initialState, action: ObjectsActionTypes) =>
       case SAVE_EDITED_OBJECT:
         draft.byId[action.payload.id].name = action.payload.name;
         break;
-      case SET_OBJECT:
-        draft.test = action.payload;
+      case ADD_OBJECT:
+        draft.byId[action.payload.id] = {
+          id: action.payload.id,
+          name: action.payload.name
+        };
         break;
     }
   });
@@ -81,7 +87,7 @@ export const saveEditedObject = (
   payload: { id, name }
 });
 
-export const setObjects = (objects = {}): ObjectsActionTypes => ({
-  type: SET_OBJECT,
-  payload: objects
+export const addObject = (id: string, name: string): ObjectsActionTypes => ({
+  type: ADD_OBJECT,
+  payload: { id, name }
 });

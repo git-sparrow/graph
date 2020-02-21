@@ -107,7 +107,6 @@ export default function SimpleCard({ id, name, onDelete, onSave }: CardProps) {
       </CardContent>
       <CardActions>
         <Button size="small">Details</Button>
-        <Button size="small">Edit</Button>
         <Button color="secondary" size="small" onClick={_handleDelete}>
           Delete
         </Button>
