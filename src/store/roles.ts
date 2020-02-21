@@ -19,7 +19,7 @@ interface SetRole {
   type: typeof SET_ROLE;
   payload: object;
 }
-interface DeleteRole {
+export interface DeleteRole {
   type: typeof DELETE_ROLE;
   payload: string;
 }
@@ -34,7 +34,7 @@ type InitialState = {
 };
 
 const INIT_ROLES = "INIT_ROLES";
-const DELETE_ROLE = "DELETE_ROLE";
+export const DELETE_ROLE = "DELETE_ROLE";
 const SET_ROLE = "SET_ROLE";
 
 const initialState: InitialState = {
@@ -60,7 +60,7 @@ export default (state = initialState, action: RolesActionTypes) =>
     }
   });
 
-export const initRoles = (roles = {}) => ({
+export const initRoles = (roles = {}): RolesActionTypes => ({
   type: INIT_ROLES,
   payload: roles
 });
@@ -70,7 +70,7 @@ export const deleteRole = (id: string): RolesActionTypes => ({
   payload: id
 });
 
-export const setRoles = (role = {}) => ({
+export const setRole = (role = {}): RolesActionTypes => ({
   type: SET_ROLE,
   payload: role
 });

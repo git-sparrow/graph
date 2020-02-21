@@ -6,6 +6,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
+import Users from "./Users";
 import Roles from "./Roles";
 import Permissions from "./Permissions";
 import Objects from "./Objects";
@@ -71,7 +72,7 @@ export default function Summary() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          {/*<Roles roles={rolesArr} />*/}
+          <Users />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Roles />

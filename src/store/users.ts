@@ -2,12 +2,15 @@
 import data from "../data.json";
 
 import produce, { Draft } from "immer";
-
+import omit from "lodash/omit";
+import { filterHelper } from "../helpers";
 import { Dispatch } from "redux";
 import { normalizeUsersData } from "../util/normalizr";
 import { initObjects } from "./objects";
 import { initPermissions } from "./permissions";
 import { initRoles } from "./roles";
+
+import { DELETE_ROLE, DeleteRole } from "./roles";
 
 export interface User {
   id: string;
@@ -24,13 +27,18 @@ interface SetUser {
   type: typeof SET_USER;
   payload: object;
 }
-export type UsersActionTypes = InitUsers | SetUser;
+interface DeleteUser {
+  type: typeof DELETE_USER;
+  payload: string;
+}
+export type UsersActionTypes = InitUsers | DeleteRole | DeleteUser | SetUser;
 
 type InitialState = {
   byId: User | {};
 };
 
 const INIT_USERS = "INIT_USERS";
+const DELETE_USER = "DELETE_USER";
 const SET_USER = "SET_USER";
 
 const initialState: InitialState = {
@@ -44,17 +52,29 @@ export default (state = initialState, action: UsersActionTypes) =>
       case INIT_USERS:
         draft.byId = action.payload;
         break;
+      case DELETE_ROLE:
+        draft.byId = filterHelper(state.byId, "roles", action.payload);
+        break;
+      case DELETE_USER:
+        draft.byId = omit(state.byId, [action.payload]);
+        break;
       case SET_USER:
         draft.users = action.payload;
         break;
     }
   });
 
-export const initUsers = (users = {}) => ({
+export const initUsers = (users = {}): UsersActionTypes => ({
   type: INIT_USERS,
   payload: users
 });
-export const setUser = (user: User) => ({
+
+export const deleteUser = (id: string): UsersActionTypes => ({
+  type: DELETE_USER,
+  payload: id
+});
+
+export const setUser = (user: User): UsersActionTypes => ({
   type: SET_USER,
   payload: user
 });

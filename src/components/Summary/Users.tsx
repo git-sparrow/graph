@@ -1,27 +1,38 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/rootReducer";
+import { deleteUser } from "../../store/users";
+import Card from "./components/Card";
 
-type RolesProps = {
-  roles: { id: string; name: string }[];
-};
+const Users = () => {
+  const users: any = useSelector((store: RootState) => store.users.byId);
+  const dispatch = useDispatch();
 
-const Users = ({ roles }: RolesProps) => {
-  // const users: object = useSelector((store: RootState) => store.users.users);
-  // console.log(users);
-  // // @ts-ignore
-  // const testArray = Object.keys(users).map((item: string) => {
-  //     // @ts-ignore
-  //     console.log(users[item], "Test");
-  //     // @ts-ignore
-  //     return users[item];
-  // });
-  // console.log("testArray", testArray);
+  const _handleDelete = useCallback(
+    id => {
+      dispatch(deleteUser(id));
+    },
+    [dispatch]
+  );
+
+  let usersArray = Object.keys(users).map(item => {
+    return users[item];
+  });
+
   return (
     <div>
       <h1>Roles component</h1>
       <ul>
-        {roles.length > 0 &&
-          roles.map(role => {
-            return <li key={role.id}>{role.name}</li>;
+        {usersArray.length > 0 &&
+          usersArray.map(item => {
+            return (
+              <Card
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                onDelete={_handleDelete}
+              />
+            );
           })}
       </ul>
     </div>
