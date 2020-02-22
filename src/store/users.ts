@@ -10,7 +10,7 @@ import { initObjects } from "./objects";
 import { initPermissions } from "./permissions";
 import { initRoles } from "./roles";
 
-import { DELETE_ROLE, DeleteRole } from "./roles";
+import { DELETE_ROLE, ADD_ROLE, DeleteRole, AddRole } from "./roles";
 
 export interface User {
   id: string;
@@ -41,6 +41,7 @@ export interface SaveEditedUser {
 export type UsersActionTypes =
   | InitUsers
   | DeleteRole
+  | AddRole
   | DeleteUser
   | SaveEditedUser
   | SetUser;
@@ -58,7 +59,6 @@ const initialState: InitialState = {
   byId: {}
 };
 
-// reducer
 export default (state = initialState, action: UsersActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {
@@ -67,6 +67,9 @@ export default (state = initialState, action: UsersActionTypes) =>
         break;
       case DELETE_ROLE:
         draft.byId = filterHelper(state.byId, "roles", action.payload);
+        break;
+      case ADD_ROLE:
+        draft.byId[action.payload.relatedUser].roles.push(action.payload.id);
         break;
       case DELETE_USER:
         draft.byId = omit(state.byId, [action.payload]);

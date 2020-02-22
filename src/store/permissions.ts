@@ -80,6 +80,7 @@ export default (state = initialState, action: PermissionsActionTypes) =>
           name: action.payload.name,
           objects: []
         };
+        break;
     }
   });
 
