@@ -38,15 +38,17 @@ const useStyles = makeStyles({
 
 type AddPanelProps = {
   title: string;
-  relatedWith: string;
-  relatedItemsMap: { id: string; name: string }[];
+  isRoot?: boolean;
+  relatedWith?: string;
+  relatedItemsMap?: { id: string; name: string }[];
   onAddItem: (id: string, name: string, relatedItem: string) => void;
 };
 
 const AddPanel = ({
   title,
-  relatedWith,
-  relatedItemsMap,
+  isRoot = false,
+  relatedWith = "",
+  relatedItemsMap = [],
   onAddItem
 }: AddPanelProps) => {
   const classes = useStyles();
@@ -102,33 +104,35 @@ const AddPanel = ({
             onChange={_handleFieldNameChange}
           />
         </div>
-        <div className={classes.selectBlock}>
-          <InputLabel id="demo-simple-select-label">
-            Pick related {relatedWith}
-          </InputLabel>
-          <Select
-            className={classes.selectInput}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={relatedItem}
-            onChange={_handleSelectChange}
-          >
-            {relatedItemsMap.length > 0 &&
-              relatedItemsMap.map((item: { id: string; name: string }) => {
-                return (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </div>
+        {!isRoot && (
+          <div className={classes.selectBlock}>
+            <InputLabel id="demo-simple-select-label">
+              Pick related {relatedWith}
+            </InputLabel>
+            <Select
+              className={classes.selectInput}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={relatedItem}
+              onChange={_handleSelectChange}
+            >
+              {relatedItemsMap.length > 0 &&
+                relatedItemsMap.map((item: { id: string; name: string }) => {
+                  return (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
+          </div>
+        )}
         <Button
           className={classes.saveBtn}
           variant="contained"
           color="primary"
           onClick={_handleAdd}
-          disabled={!fieldName || !relatedItem}
+          disabled={isRoot ? !fieldName : !fieldName || !relatedItem}
         >
           Save
         </Button>

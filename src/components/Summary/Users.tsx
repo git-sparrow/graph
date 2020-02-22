@@ -1,8 +1,9 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import { deleteUser, saveEditedUser } from "../../store/users";
+import { addUser, deleteUser, saveEditedUser } from "../../store/users";
 import Card from "./components/Card";
+import AddPanel from "./components/AddPanel";
 
 const Users = () => {
   const users: any = useSelector((store: RootState) => store.users.byId);
@@ -21,6 +22,12 @@ const Users = () => {
     },
     [dispatch]
   );
+  const _handleAddUser = useCallback(
+    (id: string, name: string) => {
+      dispatch(addUser(id, name));
+    },
+    [dispatch]
+  );
 
   let usersArray = Object.keys(users).map(item => {
     return users[item];
@@ -28,7 +35,8 @@ const Users = () => {
 
   return (
     <div>
-      <h1>Roles component</h1>
+      <h1>Users component</h1>
+      <AddPanel title={"user"} isRoot={true} onAddItem={_handleAddUser} />
       <ul>
         {usersArray.length > 0 &&
           usersArray.map(item => {

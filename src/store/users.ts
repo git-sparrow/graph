@@ -23,9 +23,12 @@ interface InitUsers {
   type: typeof INIT_USERS;
   payload: object;
 }
-interface SetUser {
-  type: typeof SET_USER;
-  payload: object;
+interface AddUser {
+  type: typeof ADD_USER;
+  payload: {
+    id: string;
+    name: string;
+  };
 }
 interface DeleteUser {
   type: typeof DELETE_USER;
@@ -44,7 +47,7 @@ export type UsersActionTypes =
   | AddRole
   | DeleteUser
   | SaveEditedUser
-  | SetUser;
+  | AddUser;
 
 type InitialState = {
   byId: User | {};
@@ -53,7 +56,7 @@ type InitialState = {
 const INIT_USERS = "INIT_USERS";
 const DELETE_USER = "DELETE_USER";
 const SAVE_EDITED_USER = "SAVE_EDITED_USER";
-const SET_USER = "SET_USER";
+const ADD_USER = "ADD_USER";
 
 const initialState: InitialState = {
   byId: {}
@@ -77,8 +80,13 @@ export default (state = initialState, action: UsersActionTypes) =>
       case SAVE_EDITED_USER:
         draft.byId[action.payload.id].name = action.payload.name;
         break;
-      case SET_USER:
-        draft.users = action.payload;
+      case ADD_USER:
+        draft.byId[action.payload.id] = {
+          id: action.payload.id,
+          name: action.payload.name,
+          address: "some address",
+          roles: []
+        };
         break;
     }
   });
@@ -98,9 +106,9 @@ export const saveEditedUser = (id: string, name: string): UsersActionTypes => ({
   payload: { id, name }
 });
 
-export const setUser = (user: User): UsersActionTypes => ({
-  type: SET_USER,
-  payload: user
+export const addUser = (id: string, name: string): UsersActionTypes => ({
+  type: ADD_USER,
+  payload: { id, name }
 });
 
 export const fetchUsers = () => {
