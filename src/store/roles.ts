@@ -2,8 +2,12 @@ import produce, { Draft } from "immer";
 import omit from "lodash/omit";
 import { filterHelper } from "../helpers";
 
-import { DeletePermission } from "./permissions";
-import { DELETE_PERMISSION } from "./permissions";
+import {
+  DELETE_PERMISSION,
+  ADD_PERMISSION,
+  DeletePermission,
+  AddPermission
+} from "./permissions";
 
 export interface Role {
   id: string;
@@ -34,6 +38,7 @@ export type RolesActionTypes =
   | InitRoles
   | SetRole
   | DeletePermission
+  | AddPermission
   | DeleteRole
   | SaveEditedRole;
 
@@ -50,7 +55,6 @@ const initialState: InitialState = {
   byId: {}
 };
 
-// reducer
 export default (state = initialState, action: RolesActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {
@@ -59,6 +63,11 @@ export default (state = initialState, action: RolesActionTypes) =>
         break;
       case DELETE_PERMISSION:
         draft.byId = filterHelper(state.byId, "permissions", action.payload);
+        break;
+      case ADD_PERMISSION:
+        draft.byId[action.payload.relatedRole].permissions.push(
+          action.payload.id
+        );
         break;
       case DELETE_ROLE:
         draft.byId = omit(state.byId, [action.payload]);

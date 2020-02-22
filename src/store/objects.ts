@@ -48,7 +48,6 @@ const initialState: InitialState = {
   byId: {}
 };
 
-// reducer
 export default (state = initialState, action: ObjectsActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {

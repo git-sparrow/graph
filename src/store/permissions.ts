@@ -14,9 +14,13 @@ interface InitPermissions {
   type: typeof INIT_PERMISSIONS;
   payload: object;
 }
-interface SetPermission {
-  type: typeof SET_PERMISSION;
-  payload: object;
+export interface AddPermission {
+  type: typeof ADD_PERMISSION;
+  payload: {
+    id: string;
+    name: string;
+    relatedRole: string;
+  };
 }
 export interface DeletePermission {
   type: typeof DELETE_PERMISSION;
@@ -31,11 +35,11 @@ export interface SaveEditedPermission {
 }
 export type PermissionsActionTypes =
   | InitPermissions
-  | SetPermission
   | DeleteObject
   | AddObject
   | DeletePermission
-  | SaveEditedPermission;
+  | SaveEditedPermission
+  | AddPermission;
 
 type InitialState = {
   byId: Permission | {};
@@ -44,13 +48,12 @@ type InitialState = {
 const INIT_PERMISSIONS = "INIT_PERMISSIONS";
 const SAVE_EDITED_PERMISSION = "SAVE_EDITED_PERMISSION";
 export const DELETE_PERMISSION = "DELETE_PERMISSION";
-const SET_PERMISSION = "SET_PERMISSION";
+export const ADD_PERMISSION = "ADD_PERMISSION";
 
 const initialState: InitialState = {
   byId: {}
 };
 
-// reducer
 export default (state = initialState, action: PermissionsActionTypes) =>
   produce(state, (draft: Draft<any>) => {
     switch (action.type) {
@@ -71,9 +74,12 @@ export default (state = initialState, action: PermissionsActionTypes) =>
       case SAVE_EDITED_PERMISSION:
         draft.byId[action.payload.id].name = action.payload.name;
         break;
-      case SET_PERMISSION:
-        draft.permissions = action.payload;
-        break;
+      case ADD_PERMISSION:
+        draft.byId[action.payload.id] = {
+          id: action.payload.id,
+          name: action.payload.name,
+          objects: []
+        };
     }
   });
 
@@ -95,7 +101,11 @@ export const saveEditedPermission = (
   payload: { id, name }
 });
 
-export const setPermissions = (permissions = {}) => ({
-  type: SET_PERMISSION,
-  payload: permissions
+export const addPermission = (
+  id: string,
+  name: string,
+  relatedRole: string
+): PermissionsActionTypes => ({
+  type: ADD_PERMISSION,
+  payload: { id, name, relatedRole }
 });

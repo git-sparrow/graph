@@ -16,6 +16,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles({
   secondaryHeading: {
@@ -35,6 +36,9 @@ const useStyles = makeStyles({
   },
   saveBtn: {
     marginLeft: 20
+  },
+  alert: {
+    marginLeft: 20
   }
 });
 
@@ -48,6 +52,7 @@ const Objects = () => {
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [fieldName, setFieldName] = React.useState<string>("");
   const [relatedPermission, setRelatedPermission] = React.useState("");
+  const [isShownAlert, setIsShownAlert] = React.useState<boolean>(false);
 
   const _handleFieldNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldName(e.target.value);
@@ -83,6 +88,8 @@ const Objects = () => {
   const _handleAdd = () => {
     const id = uuid.v4();
     dispatch(addObject(id, fieldName, relatedPermission));
+    setIsShownAlert(true);
+    setFieldName("");
   };
 
   let objectsArray = Object.keys(objects).map(item => {
@@ -105,7 +112,7 @@ const Objects = () => {
           id="panel1bh-header"
         >
           <Typography className={classes.secondaryHeading}>
-            Add new item
+            Add new object
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
@@ -131,7 +138,9 @@ const Objects = () => {
               {permissionsKeys.length > 0 &&
                 permissionsKeys.map(item => {
                   return (
-                    <MenuItem value={item}>{permissions[item].name}</MenuItem>
+                    <MenuItem key={item} value={item}>
+                      {permissions[item].name}
+                    </MenuItem>
                   );
                 })}
             </Select>
@@ -145,6 +154,18 @@ const Objects = () => {
           >
             Save
           </Button>
+          {isShownAlert && (
+            <Alert
+              className={classes.alert}
+              variant="filled"
+              severity="info"
+              onClose={() => {
+                setIsShownAlert(false);
+              }}
+            >
+              Successfully added
+            </Alert>
+          )}
         </ExpansionPanelDetails>
       </ExpansionPanel>
       {objectsArray.length > 0 &&
