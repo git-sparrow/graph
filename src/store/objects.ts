@@ -21,11 +21,12 @@ interface SaveEditedObject {
     name: string;
   };
 }
-export interface SetObject {
+export interface AddObject {
   type: typeof ADD_OBJECT;
   payload: {
     id: string;
     name: string;
+    relatedPermission: string;
   };
 }
 
@@ -34,14 +35,14 @@ type InitialState = {
 };
 
 const INIT_OBJECTS = "INIT_OBJECTS";
-const DELETE_OBJECT = "DELETE_OBJECT";
+export const DELETE_OBJECT = "DELETE_OBJECT";
 const SAVE_EDITED_OBJECT = "SAVE_EDITED_OBJECT";
-const ADD_OBJECT = "ADD_OBJECT";
+export const ADD_OBJECT = "ADD_OBJECT";
 export type ObjectsActionTypes =
   | InitObjects
   | DeleteObject
   | SaveEditedObject
-  | SetObject;
+  | AddObject;
 
 const initialState: InitialState = {
   byId: {}
@@ -87,7 +88,11 @@ export const saveEditedObject = (
   payload: { id, name }
 });
 
-export const addObject = (id: string, name: string): ObjectsActionTypes => ({
+export const addObject = (
+  id: string,
+  name: string,
+  relatedPermission: string
+): ObjectsActionTypes => ({
   type: ADD_OBJECT,
-  payload: { id, name }
+  payload: { id, name, relatedPermission }
 });

@@ -2,6 +2,8 @@ import produce, { Draft } from "immer";
 import { filterHelper } from "../helpers";
 import omit from "lodash/omit";
 
+import { DeleteObject, AddObject, DELETE_OBJECT, ADD_OBJECT } from "./objects";
+
 export interface Permission {
   id: string;
   name: string;
@@ -15,10 +17,6 @@ interface InitPermissions {
 interface SetPermission {
   type: typeof SET_PERMISSION;
   payload: object;
-}
-export interface DeleteObject {
-  type: typeof DELETE_OBJECT;
-  payload: string;
 }
 export interface DeletePermission {
   type: typeof DELETE_PERMISSION;
@@ -35,6 +33,7 @@ export type PermissionsActionTypes =
   | InitPermissions
   | SetPermission
   | DeleteObject
+  | AddObject
   | DeletePermission
   | SaveEditedPermission;
 
@@ -43,7 +42,6 @@ type InitialState = {
 };
 
 const INIT_PERMISSIONS = "INIT_PERMISSIONS";
-const DELETE_OBJECT = "DELETE_OBJECT";
 const SAVE_EDITED_PERMISSION = "SAVE_EDITED_PERMISSION";
 export const DELETE_PERMISSION = "DELETE_PERMISSION";
 const SET_PERMISSION = "SET_PERMISSION";
@@ -61,6 +59,11 @@ export default (state = initialState, action: PermissionsActionTypes) =>
         break;
       case DELETE_OBJECT:
         draft.byId = filterHelper(state.byId, "objects", action.payload);
+        break;
+      case ADD_OBJECT:
+        draft.byId[action.payload.relatedPermission].objects.push(
+          action.payload.id
+        );
         break;
       case DELETE_PERMISSION:
         draft.byId = omit(state.byId, [action.payload]);

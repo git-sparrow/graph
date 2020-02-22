@@ -12,7 +12,6 @@ export const filterHelper = (
       const elIndex = dependencyArray.findIndex(
         (item: string) => item === idToRemove
       );
-      console.log("Element index", elIndex);
       if (~elIndex) {
         dependencyArray = dependencyArray.filter(
           (item: string) => item !== idToRemove

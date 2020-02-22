@@ -24,17 +24,30 @@ const useStyles = makeStyles({
   },
   expansionBlock: {
     marginBottom: 30,
-    backgroundColor: "#dddd96"
+    backgroundColor: "#a9dd8d"
+  },
+  selectBlock: {
+    width: 200,
+    marginLeft: 60
+  },
+  selectInput: {
+    minWidth: 200
+  },
+  saveBtn: {
+    marginLeft: 20
   }
 });
 
 const Objects = () => {
   const classes = useStyles();
   const objects: any = useSelector((store: RootState) => store.objects.byId);
+  const permissions: any = useSelector(
+    (store: RootState) => store.permissions.byId
+  );
   const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [fieldName, setFieldName] = React.useState<string>("");
-  const [age, setAge] = React.useState("");
+  const [relatedPermission, setRelatedPermission] = React.useState("");
 
   const _handleFieldNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldName(e.target.value);
@@ -43,7 +56,7 @@ const Objects = () => {
   const _handleSelectChange = (
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
-    setAge(event.target.value as string);
+    setRelatedPermission(event.target.value as string);
   };
 
   const _handleExpand = (panel: string) => (
@@ -69,12 +82,14 @@ const Objects = () => {
 
   const _handleAdd = () => {
     const id = uuid.v4();
-    dispatch(addObject(id, fieldName));
+    dispatch(addObject(id, fieldName, relatedPermission));
   };
 
   let objectsArray = Object.keys(objects).map(item => {
     return objects[item];
   });
+
+  const permissionsKeys = Object.keys(permissions);
 
   return (
     <div>
@@ -102,20 +117,32 @@ const Objects = () => {
               onChange={_handleFieldNameChange}
             />
           </div>
-          <div>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <div className={classes.selectBlock}>
+            <InputLabel id="demo-simple-select-label">
+              Pick related permission
+            </InputLabel>
             <Select
+              className={classes.selectInput}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={age}
+              value={relatedPermission}
               onChange={_handleSelectChange}
             >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {permissionsKeys.length > 0 &&
+                permissionsKeys.map(item => {
+                  return (
+                    <MenuItem value={item}>{permissions[item].name}</MenuItem>
+                  );
+                })}
             </Select>
           </div>
-          <Button variant="contained" color="primary" onClick={_handleAdd}>
+          <Button
+            className={classes.saveBtn}
+            variant="contained"
+            color="primary"
+            onClick={_handleAdd}
+            disabled={!fieldName || !relatedPermission}
+          >
             Save
           </Button>
         </ExpansionPanelDetails>
