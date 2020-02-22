@@ -111,6 +111,7 @@ export const addUser = (id: string, name: string): UsersActionTypes => ({
   payload: { id, name }
 });
 
+// dummy data fetch
 export const fetchUsers = () => {
   return (dispatch: Dispatch) => {
     return Promise.resolve("started from resolve").then(() => {
